@@ -34,7 +34,7 @@ public class Main {
         if (lineLengts.length != 3) {
             throw new InvalidArgumentException(new String[]{"it must be 3 lengts"});
         }
-        return ((lineLengts[0] + lineLengts[1]) > lineLengts[2]) || ((lineLengts[0] + lineLengts[2]) > lineLengts[1]) ||
+        return ((lineLengts[0] + lineLengts[1]) > lineLengts[2]) && ((lineLengts[0] + lineLengts[2]) > lineLengts[1]) &&
                 ((lineLengts[1] + lineLengts[2]) > lineLengts[0]);
     }
 }
