@@ -1,7 +1,5 @@
 package ru.spbstu.lab1;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -25,14 +23,14 @@ public class Main {
         }
         try {
             System.out.println("It can be triangle? " + (canBeTriangle(linesLengts) ? "Yes" : "No"));
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
 
-    private static boolean canBeTriangle(double lineLengts[]) throws InvalidArgumentException {
+    private static boolean canBeTriangle(double lineLengts[]) {
         if (lineLengts.length != 3) {
-            throw new InvalidArgumentException(new String[]{"it must be 3 lengts"});
+            throw new IllegalArgumentException("Length must be equals 3");
         }
         return ((lineLengts[0] + lineLengts[1]) > lineLengts[2]) && ((lineLengts[0] + lineLengts[2]) > lineLengts[1]) &&
                 ((lineLengts[1] + lineLengts[2]) > lineLengts[0]);
