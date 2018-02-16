@@ -2,7 +2,6 @@ package ru.spbstu.lab3;
 
 public class Main {
 
-
     public static void main(String[] args) throws InterruptedException {
         Functions functions = new Functions();
         Thread thread = new ThreadTask(functions, 10);
@@ -10,7 +9,6 @@ public class Main {
         thread.start();
         thread1.start();
     }
-
 
 }
 
@@ -26,7 +24,7 @@ class RunnableTask implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < iterations; i++) {
-            functions.add1000();
+            functions.add(1000, true);
         }
     }
 }
@@ -43,37 +41,35 @@ class ThreadTask extends Thread {
     @Override
     public void run() {
         for (int i = 0; i < iterations; i++) {
-            functions.add10();
+            functions.add(10, false);
         }
     }
 }
 
 class Functions {
     static int count = 0;
-    synchronized void add10() {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        count += 10;
-        output();
-        notify();
+
+    synchronized void add(int amount, boolean isFirst) {
+        waitOrNotify(isFirst);
+        add(amount);
+        waitOrNotify(!isFirst);
     }
 
-    synchronized void add1000() {
-        notify();
-        count += 1000;
-        output();
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private synchronized void waitOrNotify(boolean isFirst) {
+        if (isFirst) {
+           notify();
+        } else {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
-    private synchronized void output() {
+    private synchronized void add(int amount) {
+        count += amount;
         System.out.println(Thread.currentThread() + " count = " + count);
     }
+
 }
