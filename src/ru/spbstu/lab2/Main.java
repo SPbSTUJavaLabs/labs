@@ -15,32 +15,33 @@ public class Main {
         System.out.println("Use I1");
         i.i1();
         System.out.println("Use I2");
-        I2 i2 = (I2)i;
+        I2 i2 = (I2) i;
         i2.i1();
         i2.i1();
         System.out.println("Use A");
-        A a = (A)i;
+        A a = (A) i;
         a.i1();
         a.a1();
+
     }
 }
 
 interface I1 {
-    default void i1(){
-        System.out.println("Method: i1 Class: "+getClass().getSimpleName());
+    default void i1() {
+        System.out.println("Method: i1 Class: " + getClass().getSimpleName());
     }
 }
 
 interface I2 extends I1 {
-   default void i2(){
-       System.out.println("Method: i2 Class: "+getClass().getSimpleName());
-   }
+    default void i2() {
+        System.out.println("Method: i2 Class: " + getClass().getSimpleName());
+    }
 }
 
 class A implements I1 {
 
     public void a1() {
-        System.out.println("Method: a1 Class: "+getClass().getSimpleName());// TODO: 15.02.2018 maybe rewrite to A 
+        System.out.println("Method: a1 Class: " + getClass().getSimpleName());
     }
 
    /* @Override
@@ -53,7 +54,7 @@ class A implements I1 {
 class B extends A implements I2 {
 
     public void b1() {
-        System.out.println("Method: b1 Class: "+getClass().getSimpleName()); // TODO: 15.02.2018  maybe rewrite to B 
+        System.out.println("Method: b1 Class: " + getClass().getSimpleName());
     }
 
     /*@Override
