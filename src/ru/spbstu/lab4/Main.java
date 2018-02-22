@@ -1,7 +1,5 @@
 package ru.spbstu.lab4;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -47,7 +45,7 @@ public class Main {
      * @param amount    amount of creating thread
      * @param classType class that's implements Runnable
      * @param group     Thread group for creating thread
-     * @return <code>ArrayList of Thread </code>
+     * @return ArrayList of Thread
      */
     private static ArrayList<Thread> createArray(int amount, Class<? extends Runnable> classType, ThreadGroup group) {
         ArrayList<Thread> list = new ArrayList<>(amount);
