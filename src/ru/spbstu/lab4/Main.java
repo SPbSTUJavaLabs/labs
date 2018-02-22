@@ -19,7 +19,6 @@ public class Main {
             if ((teachers < 0) || (students < 0)) {
                 throw new NumberFormatException("Number must be non negative");
             }
-
         } catch (NumberFormatException e) {
             System.err.println(e.getMessage());
             System.err.println("Params must be integer");
@@ -44,6 +43,12 @@ public class Main {
         }
     }
 
+    /**
+     * @param amount    amount of creating thread
+     * @param classType class that's implements Runnable
+     * @param group     Thread group for creating thread
+     * @return <code>ArrayList of Thread </code>
+     */
     private static ArrayList<Thread> createArray(int amount, Class<? extends Runnable> classType, ThreadGroup group) {
         ArrayList<Thread> list = new ArrayList<>(amount);
         for (int i = 0; i < amount; i++) {
@@ -58,6 +63,9 @@ public class Main {
     }
 }
 
+/**
+ * class that interrupt student's threads
+ */
 class Teacher implements Runnable {
     static ArrayList<Thread> students = new ArrayList<>();
     private static int current_id = 0;
@@ -72,7 +80,7 @@ class Teacher implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.interrupted()) {
+        while (!Thread.interrupted() && !students.isEmpty()) {
 
             synchronized (mutex) {
                 while ((id != current_id) && !students.isEmpty()) {
@@ -83,21 +91,27 @@ class Teacher implements Runnable {
                     }
                 }
                 if (students.isEmpty()) {
-                    mutex.notifyAll();
                     Thread.currentThread().interrupt();
                     return;
                 }
-                current_id = current_id + 1 < counter ? ++current_id : 0;
-                Thread student = students.get(rand.nextInt(students.size()));
-                System.out.printf("Teacher's thread %s = Student's thread %s\n", Thread.currentThread(), student);
-                student.interrupt();
-                students.remove(student);
+                connectWithStudent();
                 mutex.notifyAll();
             }
         }
     }
+
+    private void connectWithStudent() {
+        current_id = current_id + 1 < counter ? ++current_id : 0;
+        Thread student = students.get(rand.nextInt(students.size()));
+        System.out.printf("Teacher's thread %s = Student's thread %s\n", Thread.currentThread(), student);
+        student.interrupt();
+        students.remove(student);
+    }
 }
 
+/**
+ * class for student run while it's not interrupt
+ */
 class Student implements Runnable {
 
     @Override
