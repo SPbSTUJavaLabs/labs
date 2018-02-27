@@ -28,7 +28,7 @@ public class Main {
         }
     }
 
-    private static boolean canBeTriangle(double lineLengts[]) {
+    public static boolean canBeTriangle(double lineLengts[]) {
         if (lineLengts.length != 3) {
             throw new IllegalArgumentException("Length must be equals 3");
         }

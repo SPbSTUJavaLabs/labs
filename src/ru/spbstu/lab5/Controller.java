@@ -1,5 +1,6 @@
 package ru.spbstu.lab5;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -10,12 +11,10 @@ public class Controller {
     @FXML
     private TextArea textArea;
 
-    public Controller() {
-
-    }
+    private SimpleStringProperty outputStr;
 
     @FXML
     public void initialize() {
-
     }
+
 }
