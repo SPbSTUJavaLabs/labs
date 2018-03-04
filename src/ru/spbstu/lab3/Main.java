@@ -1,5 +1,9 @@
 package ru.spbstu.lab3;
 
+import java.io.PrintStream;
+import java.io.StringWriter;
+import java.io.Writer;
+
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
@@ -15,9 +19,11 @@ public class Main {
             System.err.println("param mus be positive integer");
             System.exit(1);
         }
+        work(iterations, System.out::println);
+    }
 
-
-        Functions functions = new Functions();
+    public static void work(int iterations, Displayable display) {
+        Functions functions = new Functions(display);
         Thread thread = new ThreadTask(functions, iterations);
         Thread thread1 = new Thread(new RunnableTask(functions, iterations));
         thread.start();
@@ -62,7 +68,10 @@ class ThreadTask extends Thread {
 
 class Functions {
     static int count = 0;
-
+    private Displayable display;
+    Functions(Displayable display){
+        this.display = display;
+    }
     synchronized void add(int amount, boolean isFirst) {
         waitOrNotify(isFirst);
         add(amount);
@@ -83,7 +92,7 @@ class Functions {
 
     private synchronized void add(int amount) {
         count += amount;
-        System.out.println(Thread.currentThread() + " count = " + count);
+        display.print(Thread.currentThread() + " count = " + count);
     }
 
 }

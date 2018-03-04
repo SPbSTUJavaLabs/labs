@@ -23,6 +23,10 @@ public class Main {
             System.exit(1);
         }
 
+        work(students, teachers);
+    }
+
+    public static void work(int students, int teachers) {
         System.out.printf("students = %d, teachers = %d\n", students, teachers);
 
         ThreadGroup teachersGroup = new ThreadGroup("Teacher");
@@ -58,52 +62,6 @@ public class Main {
             }
         }
         return list;
-    }
-}
-
-/**
- * class that interrupt student's threads
- */
-class Teacher implements Runnable {
-    static ArrayList<Thread> students = new ArrayList<>();
-    private static int current_id = 0;
-    private int id;
-    private static int counter = 0;
-    private static final Object mutex = new Object();
-    private Random rand = new Random();
-
-    public Teacher() {
-        id = counter++;
-    }
-
-    @Override
-    public void run() {
-        while (!Thread.interrupted() && !students.isEmpty()) {
-
-            synchronized (mutex) {
-                while ((id != current_id) && !students.isEmpty()) {
-                    try {
-                        mutex.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (students.isEmpty()) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-                connectWithStudent();
-                mutex.notifyAll();
-            }
-        }
-    }
-
-    private void connectWithStudent() {
-        current_id = current_id + 1 < counter ? ++current_id : 0;
-        Thread student = students.get(rand.nextInt(students.size()));
-        System.out.printf("Teacher's thread %s = Student's thread %s\n", Thread.currentThread(), student);
-        student.interrupt();
-        students.remove(student);
     }
 }
 

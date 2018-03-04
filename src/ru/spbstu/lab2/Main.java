@@ -6,22 +6,28 @@ public class Main {
 
 
     public static void main(String[] args) {
+        System.out.println(work());
+    }
+
+    public static String work() {
+        String str = "";
         B b = new B();
-        System.out.println(b.i1());
-        System.out.println(b.i2());
-        System.out.println(b.a1());
-        System.out.println(b.b1());
+        str += b.i1() + "\n";
+        str += b.i2() + "\n";
+        str += b.a1() + "\n";
+        str += b.b1() + "\n";
         I1 i = b;
-        System.out.println("Use I1");
-        System.out.println(i.i1());
-        System.out.println("Use I2");
+        str += "Use I1\n";
+        str += i.i1() + "\n";
+        str += "Use I2\n";
         I2 i2 = (I2) i;
-        System.out.println(i2.i1());
-        System.out.println(i2.i1());
-        System.out.println("Use A");
+        str += i2.i1() + "\n";
+        str += i2.i1() + "\n";
+        str += "Use A\n";
         A a = (A) i;
-        System.out.println(a.i1());
-        System.out.println(a.a1());
+        str += a.i1() + "\n";
+        str += a.a1() + "\n";
+        return str;
     }
 
 }
