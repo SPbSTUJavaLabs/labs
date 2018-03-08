@@ -22,12 +22,20 @@ public class Main {
         work(iterations, System.out::println);
     }
 
-    public static void work(int iterations, Displayable display) {
+    public static Displayable work(int iterations, Displayable display) {
         Functions functions = new Functions(display);
+        Functions.count = 0;
         Thread thread = new ThreadTask(functions, iterations);
         Thread thread1 = new Thread(new RunnableTask(functions, iterations));
         thread.start();
         thread1.start();
+        try {
+            thread.join();
+            thread1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return functions.getResult();
     }
 
 }
@@ -69,9 +77,15 @@ class ThreadTask extends Thread {
 class Functions {
     static int count = 0;
     private Displayable display;
-    Functions(Displayable display){
+
+    Functions(Displayable display) {
         this.display = display;
     }
+
+    Displayable getResult() {
+        return display;
+    }
+
     synchronized void add(int amount, boolean isFirst) {
         waitOrNotify(isFirst);
         add(amount);
@@ -94,5 +108,6 @@ class Functions {
         count += amount;
         display.print(Thread.currentThread() + " count = " + count);
     }
+
 
 }

@@ -48,7 +48,7 @@ public class Teacher implements Runnable {
     private void connectWithStudent() {
         current_id = current_id + 1 < counter ? ++current_id : 0;
         Thread student = students.get(rand.nextInt(students.size()));
-        output.print("Teacher's thread " + Thread.currentThread() + " = Student's thread %s" + student + "\n");
+        output.print("Teacher's thread " + Thread.currentThread() + " = Student's thread" + student + "\n");
         student.interrupt();
         students.remove(student);
     }

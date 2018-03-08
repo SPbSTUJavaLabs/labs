@@ -31,15 +31,14 @@ class LabsController {
         ru.spbstu.lab4.Main.work(students, teachers);
         return stringStream.toString();
     }
-
 }
 
 class StringStream implements ru.spbstu.lab3.Displayable {
-    String string;
+    private String string = "";
 
     @Override
-    public void print(String string) {
-        this.string += string + "\n";
+    public void print(String str) {
+        string += str + "\n";
     }
 
     public String toString() {
