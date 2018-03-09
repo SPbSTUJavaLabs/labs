@@ -1,5 +1,6 @@
 package ru.spbstu.lab5;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -39,8 +40,8 @@ public class Controller {
         }
 
         btnStart.setOnMouseClicked(event -> {
-            textArea.setText("Counting");
             if (event.getButton().equals(MouseButton.PRIMARY)) {
+                textArea.clear();
                 if (executable == null) {
                     return;
                 }
@@ -100,9 +101,12 @@ public class Controller {
         Spinner<Integer> spinner = new Spinner<>(0, 1000000000, 0);
         spinner.setEditable(true);
         box.getChildren().addAll(label, spinner);
-        return () -> {
-            textArea.setText(LabsController.lab3(spinner.getValue()));
-        };
+        return () -> LabsController.lab3(spinner.getValue(), this::print);
+
+    }
+
+    private void print(String string) {
+        Platform.runLater(() -> textArea.setText(textArea.getText()  + string));
     }
 
     private Executable initializeLab4() {
@@ -115,9 +119,7 @@ public class Controller {
         teachers.setEditable(true);
         box.getChildren().add(teachers);
 
-        return () -> {
-            textArea.setText(LabsController.lab4(students.getValue(), teachers.getValue()));
-        };
+        return () -> LabsController.lab4(students.getValue(), teachers.getValue(), this::print);
     }
 
     interface Executable {

@@ -8,27 +8,27 @@ import java.util.Random;
  */
 public class Teacher implements Runnable {
     static ArrayList<Thread> students = new ArrayList<>();
-    private static int current_id = 0;
-    private int id;
-    private static int counter = 0;
+
+    private static Indexes indexes = new Indexes();
+
     private static final Object mutex = new Object();
     private Random rand = new Random();
-
-    private static ru.spbstu.lab3.Displayable output = System.out::println;
+    private static ru.spbstu.lab3.Displayable output = System.out::print;
 
     public Teacher() {
-        id = counter++;
+        indexes.add(this);
     }
 
-    public static void setOutput(ru.spbstu.lab3.Displayable out){
+    public static void setOutput(ru.spbstu.lab3.Displayable out) {
         output = out;
     }
+
     @Override
     public void run() {
         while (!Thread.interrupted() && !students.isEmpty()) {
 
             synchronized (mutex) {
-                while ((id != current_id) && !students.isEmpty()) {
+                while (!indexes.canTeacherRun(this) && !students.isEmpty()) {
                     try {
                         mutex.wait();
                     } catch (InterruptedException e) {
@@ -36,20 +36,63 @@ public class Teacher implements Runnable {
                     }
                 }
                 if (students.isEmpty()) {
-                    Thread.currentThread().interrupt();
+                    indexes.remove(this);
                     return;
                 }
                 connectWithStudent();
                 mutex.notifyAll();
             }
         }
+        indexes.remove(this);
     }
 
+
     private void connectWithStudent() {
-        current_id = current_id + 1 < counter ? ++current_id : 0;
+        indexes.next();
         Thread student = students.get(rand.nextInt(students.size()));
-        output.print("Teacher's thread " + Thread.currentThread() + " = Student's thread" + student + "\n");
+        output.print("Teacher's thread " + Thread.currentThread() + " = Student's thread " + student + "\n");
         student.interrupt();
         students.remove(student);
+    }
+
+
+    static class Indexes {
+        private ArrayList<Teacher> teachers = new ArrayList<>();
+        private Teacher currentTeacher;
+
+        boolean canTeacherRun(Teacher teacher) {
+            if (!teachers.isEmpty() && (currentTeacher == null)) {
+                currentTeacher = teachers.get(0);
+            }
+
+            return teacher == currentTeacher;
+        }
+
+        boolean add(Teacher teacher) {
+            if (teachers.indexOf(teacher) >= 0) {
+                return false;
+            }
+            teachers.add(teacher);
+            return true;
+        }
+
+        void remove(Teacher teacher) {
+            teachers.remove(teacher);
+            if (teachers.isEmpty()) {
+                currentTeacher = null;
+            }
+        }
+
+        Teacher next() {
+            if ((currentTeacher == null) && !teachers.isEmpty()) {
+                currentTeacher = teachers.get(0);
+                return currentTeacher;
+            }
+            int i = teachers.indexOf(currentTeacher);
+
+            i = i < teachers.size() - 1 ? ++i : 0;
+            currentTeacher = teachers.get(i);
+            return currentTeacher;
+        }
     }
 }

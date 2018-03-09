@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Main {
-    volatile static ArrayList<Thread> studentsThreads;
-
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println("You must input 2 params");
@@ -34,18 +32,20 @@ public class Main {
         ThreadGroup teachersGroup = new ThreadGroup("Teacher");
         ThreadGroup studentsGroup = new ThreadGroup("Student");
 
-        studentsThreads = createArray(students, Student.class, studentsGroup);
+        ArrayList<Thread> studentsThreads = createArray(students, Student.class, studentsGroup);
         ArrayList<Thread> teachersThreads = createArray(teachers, Teacher.class, teachersGroup);
         Teacher.students = studentsThreads;
-
-        for (Thread thread : teachersThreads) {
-            thread.start();
-        }
-
+        //System.out.println("p1");
         for (Thread thread : studentsThreads) {
             thread.start();
         }
-        while (!studentsThreads.isEmpty()) ;
+        //System.out.println("students starts");
+        for (Thread thread : teachersThreads) {
+            thread.start();
+        }
+        //System.out.println("Teachers have been started");
+
+        //System.out.println("ОК");
     }
 
     /**

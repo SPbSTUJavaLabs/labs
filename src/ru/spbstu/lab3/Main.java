@@ -29,12 +29,6 @@ public class Main {
         Thread thread1 = new Thread(new RunnableTask(functions, iterations));
         thread.start();
         thread1.start();
-        try {
-            thread.join();
-            thread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return functions.getResult();
     }
 
@@ -106,7 +100,7 @@ class Functions {
 
     private synchronized void add(int amount) {
         count += amount;
-        display.print(Thread.currentThread() + " count = " + count);
+        display.print(Thread.currentThread() + " count = " + count + "\n");
     }
 
 

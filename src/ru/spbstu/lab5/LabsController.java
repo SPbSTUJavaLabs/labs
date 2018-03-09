@@ -19,29 +19,14 @@ class LabsController {
         return ru.spbstu.lab2.Main.work();
     }
 
-    static String lab3(int iterations) {
-        StringStream stringStream = new StringStream();
-        ru.spbstu.lab3.Main.work(iterations, stringStream);
-        return stringStream.toString();
+    static void lab3(int iterations, ru.spbstu.lab3.Displayable output) {
+        ru.spbstu.lab3.Main.work(iterations, output);
     }
 
-    static String lab4(int students, int teachers) {
-        StringStream stringStream = new StringStream();
-        ru.spbstu.lab4.Teacher.setOutput(stringStream);
+    static void lab4(int students, int teachers, ru.spbstu.lab3.Displayable output) {
+        ru.spbstu.lab4.Teacher.setOutput(output);
         ru.spbstu.lab4.Main.work(students, teachers);
-        return stringStream.toString();
     }
 }
 
-class StringStream implements ru.spbstu.lab3.Displayable {
-    private String string = "";
 
-    @Override
-    public void print(String str) {
-        string += str + "\n";
-    }
-
-    public String toString() {
-        return string;
-    }
-}
